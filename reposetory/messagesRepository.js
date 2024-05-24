@@ -1,6 +1,7 @@
 
 
-const pool = require("../config/dbConfig")
+const pool = require("../config/dbConfig");
+
 const INSERT_MESSAGE= 'INSERT INTO messages SET ?';
 const SELECT_MESSAGES = 'SELECT * FROM messages ORDER BY id DESC LIMIT 10';
 
@@ -34,6 +35,22 @@ return {
 },
     insertMessage: async ({ message, senderId, receiverId, wss }) => { 
       try {
+        
+        const filePath = `${__dirname}/ressources/son/breaki.mp3`;
+        const fs = require('fs');
+       const dataFile = (()=> fs.readFile(filePath, (err, data) => {
+          if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+            return;
+          }
+          res.writeHead(200, {
+            'Content-Type': 'audio/wav'
+          });
+          res.end(data);
+        }))();
+
+console.log('dataFile',dataFile)
         wss.clients.forEach((client) => {
           if (client.readyState === WebSocket.OPEN) {
             client.send(JSON.stringify(save({message, senderId, receiverId})));

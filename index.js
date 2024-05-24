@@ -77,6 +77,7 @@ wss.on('connection', (ws) => {
   ws.on('message', (message) => {
     console.log('Received message:', message);
   messageCtr.insertMessage({ message, wss });
+  
   });
 
   // Handle connection close
